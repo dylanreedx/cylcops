@@ -50,5 +50,28 @@ struct SessionCardView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.white.opacity(0.2), lineWidth: 1)
         )
+        .onTapGesture {
+            focusSession()
+        }
+    }
+
+    private func focusSession() {
+        // Activate Ghostty
+        let osascript = Process()
+        osascript.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        osascript.arguments = ["-e", "tell application \"Ghostty\" to activate"]
+        osascript.standardOutput = Pipe()
+        osascript.standardError = Pipe()
+        try? osascript.run()
+        osascript.waitUntilExit()
+
+        // Switch tmux client to session
+        let tmux = Process()
+        tmux.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+        tmux.arguments = ["tmux", "switch-client", "-t", session.projectName]
+        tmux.standardOutput = Pipe()
+        tmux.standardError = Pipe()
+        try? tmux.run()
+        tmux.waitUntilExit()
     }
 }
