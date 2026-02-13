@@ -51,16 +51,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.panel = panel
 
+        // Start hidden
+        panel.alphaValue = 0
+        panel.orderOut(nil)
+
         // Start mouse tracking
         let tracker = MouseTracker()
         tracker.panelFrame = panel.frame
         tracker.onShow = { [weak self] in
-            self?.panel.orderFront(nil)
+            self?.showPanel()
         }
         tracker.onHide = { [weak self] in
-            self?.panel.orderOut(nil)
+            self?.hidePanel()
         }
         tracker.start()
         self.mouseTracker = tracker
+    }
+
+    private func showPanel() {
+        panel.alphaValue = 0
+        panel.orderFront(nil)
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.2
+            panel.animator().alphaValue = 1
+        }
+    }
+
+    private func hidePanel() {
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.15
+            panel.animator().alphaValue = 0
+        }, completionHandler: { [weak self] in
+            self?.panel.orderOut(nil)
+        })
     }
 }
