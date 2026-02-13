@@ -1,10 +1,24 @@
 import AppKit
 
 class MouseTracker {
-    // TODO: Global event monitor (NSEvent.addGlobalMonitorForEvents)
-    // TODO: Local event monitor for mouse inside panel
-    // TODO: Define top-center hot zone rectangle
-    // TODO: Show callback — called when mouse enters zone
-    // TODO: Hide callback — called when mouse leaves zone and panel
-    // TODO: Start/stop monitoring methods
+    private var globalMonitor: Any?
+    var onMouseMoved: ((NSPoint) -> Void)?
+
+    func start() {
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] event in
+            let location = NSEvent.mouseLocation
+            self?.onMouseMoved?(location)
+        }
+    }
+
+    func stop() {
+        if let monitor = globalMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalMonitor = nil
+        }
+    }
+
+    deinit {
+        stop()
+    }
 }

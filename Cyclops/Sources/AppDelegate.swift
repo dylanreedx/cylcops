@@ -3,6 +3,7 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: NSPanel!
+    var mouseTracker: MouseTracker!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let panel = NSPanel(
@@ -49,5 +50,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         self.panel = panel
+
+        // Start mouse tracking
+        let tracker = MouseTracker()
+        tracker.onMouseMoved = { [weak self] location in
+            _ = self?.panel
+            _ = location
+        }
+        tracker.start()
+        self.mouseTracker = tracker
     }
 }
