@@ -53,9 +53,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Start mouse tracking
         let tracker = MouseTracker()
-        tracker.onMouseMoved = { [weak self] location in
-            _ = self?.panel
-            _ = location
+        tracker.panelFrame = panel.frame
+        tracker.onShow = { [weak self] in
+            self?.panel.orderFront(nil)
+        }
+        tracker.onHide = { [weak self] in
+            self?.panel.orderOut(nil)
         }
         tracker.start()
         self.mouseTracker = tracker
