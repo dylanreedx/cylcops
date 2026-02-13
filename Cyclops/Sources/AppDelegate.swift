@@ -1,88 +1,113 @@
 import AppKit
 import SwiftUI
 
-class AppState: ObservableObject {
-    @Published var sessions: [AgentSession] = []
-    @Published var projects: [ProjectStatus] = []
+// MARK: - Notch State
 
-    private let bridge = DataBridge()
+enum NotchState {
+    case closed
+    case open
+}
 
-    func refresh() {
-        sessions = bridge.fetchSessions()
-        projects = bridge.fetchProjects()
+// MARK: - NotchViewModel
+
+class NotchViewModel: ObservableObject {
+    @Published var notchState: NotchState = .closed
+
+    let closedSize: CGSize
+    let openSize: CGSize
+
+    init() {
+        self.closedSize = NotchSizing.getClosedNotchSize()
+        self.openSize = NotchSizing.openSize
+    }
+
+    func open() {
+        notchState = .open
+    }
+
+    func close() {
+        notchState = .closed
     }
 }
 
+// MARK: - AppState
+
+class AppState: ObservableObject {
+    @Published var sessions: [AgentSession] = []
+    @Published var projects: [ProjectStatus] = []
+    @Published var memories: [Memory] = []
+
+    private let bridge = DataBridge()
+    private let refreshQueue = DispatchQueue(label: "cyclops.refresh", qos: .userInitiated)
+
+    func refresh() {
+        refreshQueue.async { [self] in
+            var sessions = bridge.fetchSessions()
+            let projects = bridge.fetchProjects()
+            let memories = bridge.fetchMemories()
+
+            for i in sessions.indices {
+                guard sessions[i].isActive else { continue }
+                let tmuxTarget = sessions[i].tmuxSession.isEmpty ? sessions[i].projectName : sessions[i].tmuxSession
+                sessions[i].terminalContent = bridge.captureTerminalContent(for: tmuxTarget)
+                let stats = bridge.fetchDiffStats(workspacePath: sessions[i].workspacePath)
+                sessions[i].linesAdded = stats.added
+                sessions[i].linesRemoved = stats.removed
+            }
+
+            DispatchQueue.main.async { [self] in
+                self.sessions = sessions
+                self.projects = projects
+                self.memories = memories
+            }
+        }
+    }
+}
+
+// MARK: - AppDelegate
+
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var panel: NSPanel!
+    var panel: CyclopsWindow!
     var mouseTracker: MouseTracker!
     var appState = AppState()
+    var notchVM = NotchViewModel()
     var refreshTimer: Timer?
     var keyMonitor: Any?
     private var panelVisible = false
-    private var panelOrigin: NSPoint = .zero
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 360, height: 480),
+        // Create panel at fixed frame — it will NEVER be resized
+        let frame = NotchSizing.fixedFrame()
+        let newPanel = CyclopsWindow(
+            contentRect: frame,
             styleMask: [.borderless, .nonactivatingPanel, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
-        panel.level = .floating
-        panel.backgroundColor = .clear
-        panel.isMovableByWindowBackground = false
-        panel.hidesOnDeactivate = false
-        panel.collectionBehavior = [.canJoinAllSpaces, .transient]
-        panel.isOpaque = false
-        panel.hasShadow = true
 
-        // Glassmorphism backdrop
-        let visualEffect = NSVisualEffectView(frame: panel.contentView!.bounds)
-        visualEffect.material = .hudWindow
-        visualEffect.blendingMode = .behindWindow
-        visualEffect.state = .active
-        visualEffect.wantsLayer = true
-        visualEffect.layer?.cornerRadius = 16
-        visualEffect.layer?.masksToBounds = true
-        visualEffect.autoresizingMask = [.width, .height]
-        panel.contentView = visualEffect
-
-        // Host SwiftUI view on top of visual effect
-        let hostingView = NSHostingView(rootView: AgentView().environmentObject(appState))
-        hostingView.frame = visualEffect.bounds
+        // Host SwiftUI view — it handles its own background via NotchShape clip
+        let hostingView = NSHostingView(
+            rootView: AgentView()
+                .environmentObject(appState)
+                .environmentObject(notchVM)
+        )
+        hostingView.frame = NSRect(origin: .zero, size: frame.size)
         hostingView.autoresizingMask = [.width, .height]
-        visualEffect.addSubview(hostingView)
+        newPanel.contentView = hostingView
 
-        // Position centered under the notch / menu bar
-        if let screen = NSScreen.main {
-            let screenFrame = screen.frame
-            let visibleFrame = screen.visibleFrame
-            let menuBarHeight = screenFrame.height - visibleFrame.height - visibleFrame.origin.y + screenFrame.origin.y
-            let panelWidth: CGFloat = 360
-            let panelHeight: CGFloat = 480
-            let x = screenFrame.origin.x + (screenFrame.width - panelWidth) / 2
-            let y = screenFrame.origin.y + screenFrame.height - menuBarHeight - panelHeight - 8
-            let origin = NSPoint(x: x, y: y)
-            panel.setFrameOrigin(origin)
-            self.panelOrigin = origin
-        }
+        self.panel = newPanel
 
-        self.panel = panel
+        // Register with CGSSpace for above-everything rendering
+        newPanel.orderFront(nil)
+        newPanel.registerWithNotchSpace()
 
-        // Start hidden
-        panel.alphaValue = 0
-        panel.orderOut(nil)
+        // Panel stays at fixed frame forever — SwiftUI handles all animation
+        panel.alphaValue = 1
 
-        // Start mouse tracking
+        // Mouse tracking
         let tracker = MouseTracker()
-        tracker.panelFrame = panel.frame
-        tracker.onShow = { [weak self] in
-            self?.showPanel()
-        }
-        tracker.onHide = { [weak self] in
-            self?.hidePanel()
-        }
+        tracker.onShow = { [weak self] in self?.showPanel() }
+        tracker.onHide = { [weak self] in self?.hidePanel() }
         tracker.start()
         self.mouseTracker = tracker
 
@@ -111,31 +136,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func showPanel() {
         guard !panelVisible else { return }
         panelVisible = true
-
-        // Start offset above final position and transparent
-        panel.alphaValue = 0
-        panel.setFrameOrigin(NSPoint(x: panelOrigin.x, y: panelOrigin.y + 10))
-        panel.orderFront(nil)
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.25
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            panel.animator().alphaValue = 1
-            panel.animator().setFrameOrigin(panelOrigin)
-        }
+        notchVM.open()
     }
 
     private func hidePanel() {
         guard panelVisible else { return }
         panelVisible = false
-
-        NSAnimationContext.runAnimationGroup({ context in
-            context.duration = 0.15
-            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
-            panel.animator().alphaValue = 0
-            panel.animator().setFrameOrigin(NSPoint(x: panelOrigin.x, y: panelOrigin.y + 5))
-        }, completionHandler: { [weak self] in
-            self?.panel.orderOut(nil)
-        })
+        notchVM.close()
     }
 }
