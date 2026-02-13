@@ -44,7 +44,11 @@ struct SessionCardView: View {
                 .foregroundColor(.white.opacity(0.6))
         }
         .padding(10)
-        .background(Color.white.opacity(0.06))
+        .background(Color.white.opacity(0.1))
         .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+        )
     }
 }
