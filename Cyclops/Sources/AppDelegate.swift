@@ -30,6 +30,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         visualEffect.autoresizingMask = [.width, .height]
         panel.contentView = visualEffect
 
+        // Host SwiftUI view on top of visual effect
+        let hostingView = NSHostingView(rootView: AgentView())
+        hostingView.frame = visualEffect.bounds
+        hostingView.autoresizingMask = [.width, .height]
+        visualEffect.addSubview(hostingView)
+
         // Position centered under the notch / menu bar
         if let screen = NSScreen.main {
             let screenFrame = screen.frame

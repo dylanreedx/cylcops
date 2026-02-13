@@ -8,7 +8,8 @@ struct AgentView: View {
         // TODO: Tab bar at top
         // TODO: Scrollable list of SessionCardView items
         // TODO: Project progress section
-        // TODO: Glassmorphism styling
         Text("Cyclops")
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
