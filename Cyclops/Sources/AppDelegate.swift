@@ -2,10 +2,23 @@ import AppKit
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    // TODO: Create NSPanel (borderless, floating, nonactivating)
-    // TODO: Configure NSVisualEffectView with .hudWindow material
-    // TODO: Set up SwiftUI hosting view with AgentView
-    // TODO: Position window centered under notch
-    // TODO: Initialize MouseTracker for show/hide
-    // TODO: Set up periodic data refresh timer
+    var panel: NSPanel!
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let panel = NSPanel(
+            contentRect: NSRect(x: 0, y: 0, width: 360, height: 480),
+            styleMask: [.borderless, .nonactivatingPanel, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        panel.level = .floating
+        panel.backgroundColor = .clear
+        panel.isMovableByWindowBackground = false
+        panel.hidesOnDeactivate = false
+        panel.collectionBehavior = [.canJoinAllSpaces, .transient]
+        panel.isOpaque = false
+        panel.hasShadow = true
+
+        self.panel = panel
+    }
 }
