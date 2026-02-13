@@ -39,6 +39,32 @@ struct DataBridge {
         return []
     }
 
+    func fetchSessions() -> [AgentSession] {
+        let rows = runQuery("""
+            SELECT s.id, p.name AS project_name, s.started_at, s.status
+            FROM sessions s
+            JOIN projects p ON p.id = s.project_id
+            WHERE s.completed_at IS NULL
+            ORDER BY s.started_at DESC
+            """)
+
+        let now = Date()
+        return rows.map { row in
+            let startedAt: Date
+            if let ts = Double(row["started_at"] ?? "") {
+                startedAt = Date(timeIntervalSince1970: ts / 1000)
+            } else {
+                startedAt = now
+            }
+            return AgentSession(
+                id: row["id"] ?? "",
+                projectName: row["project_name"] ?? "",
+                startedAt: startedAt,
+                status: row["status"] ?? "pending"
+            )
+        }
+    }
+
     func fetchProjects() -> [ProjectStatus] {
         let rows = runQuery("""
             SELECT p.name,
