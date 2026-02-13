@@ -19,6 +19,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.isOpaque = false
         panel.hasShadow = true
 
+        // Glassmorphism backdrop
+        let visualEffect = NSVisualEffectView(frame: panel.contentView!.bounds)
+        visualEffect.material = .hudWindow
+        visualEffect.blendingMode = .behindWindow
+        visualEffect.state = .active
+        visualEffect.wantsLayer = true
+        visualEffect.layer?.cornerRadius = 16
+        visualEffect.layer?.masksToBounds = true
+        visualEffect.autoresizingMask = [.width, .height]
+        panel.contentView = visualEffect
+
         // Position centered under the notch / menu bar
         if let screen = NSScreen.main {
             let screenFrame = screen.frame
