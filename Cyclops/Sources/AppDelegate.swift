@@ -19,6 +19,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.isOpaque = false
         panel.hasShadow = true
 
+        // Position centered under the notch / menu bar
+        if let screen = NSScreen.main {
+            let screenFrame = screen.frame
+            let visibleFrame = screen.visibleFrame
+            let menuBarHeight = screenFrame.height - visibleFrame.height - visibleFrame.origin.y + screenFrame.origin.y
+            let panelWidth: CGFloat = 360
+            let panelHeight: CGFloat = 480
+            let x = screenFrame.origin.x + (screenFrame.width - panelWidth) / 2
+            let y = screenFrame.origin.y + screenFrame.height - menuBarHeight - panelHeight - 8
+            panel.setFrameOrigin(NSPoint(x: x, y: y))
+        }
+
         self.panel = panel
     }
 }
