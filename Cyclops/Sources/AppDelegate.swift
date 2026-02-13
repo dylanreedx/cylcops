@@ -20,6 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var refreshTimer: Timer?
     var keyMonitor: Any?
     private var panelVisible = false
+    private var panelOrigin: NSPoint = .zero
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let panel = NSPanel(
@@ -62,7 +63,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let panelHeight: CGFloat = 480
             let x = screenFrame.origin.x + (screenFrame.width - panelWidth) / 2
             let y = screenFrame.origin.y + screenFrame.height - menuBarHeight - panelHeight - 8
-            panel.setFrameOrigin(NSPoint(x: x, y: y))
+            let origin = NSPoint(x: x, y: y)
+            panel.setFrameOrigin(origin)
+            self.panelOrigin = origin
         }
 
         self.panel = panel
@@ -108,20 +111,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func showPanel() {
         guard !panelVisible else { return }
         panelVisible = true
+
+        // Start offset above final position and transparent
         panel.alphaValue = 0
+        panel.setFrameOrigin(NSPoint(x: panelOrigin.x, y: panelOrigin.y + 10))
         panel.orderFront(nil)
+
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.2
+            context.duration = 0.25
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
             panel.animator().alphaValue = 1
+            panel.animator().setFrameOrigin(panelOrigin)
         }
     }
 
     private func hidePanel() {
         guard panelVisible else { return }
         panelVisible = false
+
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = 0.15
+            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
             panel.animator().alphaValue = 0
+            panel.animator().setFrameOrigin(NSPoint(x: panelOrigin.x, y: panelOrigin.y + 5))
         }, completionHandler: { [weak self] in
             self?.panel.orderOut(nil)
         })
