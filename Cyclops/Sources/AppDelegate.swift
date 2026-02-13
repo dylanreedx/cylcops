@@ -1,9 +1,23 @@
 import AppKit
 import SwiftUI
 
+class AppState: ObservableObject {
+    @Published var sessions: [AgentSession] = []
+    @Published var projects: [ProjectStatus] = []
+
+    private let bridge = DataBridge()
+
+    func refresh() {
+        sessions = bridge.fetchSessions()
+        projects = bridge.fetchProjects()
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: NSPanel!
     var mouseTracker: MouseTracker!
+    var appState = AppState()
+    var refreshTimer: Timer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let panel = NSPanel(
@@ -32,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.contentView = visualEffect
 
         // Host SwiftUI view on top of visual effect
-        let hostingView = NSHostingView(rootView: AgentView())
+        let hostingView = NSHostingView(rootView: AgentView().environmentObject(appState))
         hostingView.frame = visualEffect.bounds
         hostingView.autoresizingMask = [.width, .height]
         visualEffect.addSubview(hostingView)
@@ -66,6 +80,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         tracker.start()
         self.mouseTracker = tracker
+
+        // Periodic data refresh
+        appState.refresh()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.appState.refresh()
+        }
     }
 
     private func showPanel() {
