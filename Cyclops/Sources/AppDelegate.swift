@@ -18,6 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mouseTracker: MouseTracker!
     var appState = AppState()
     var refreshTimer: Timer?
+    var keyMonitor: Any?
+    private var panelVisible = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let panel = NSPanel(
@@ -81,6 +83,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         tracker.start()
         self.mouseTracker = tracker
 
+        // Global keyboard shortcut: Cmd+Shift+C
+        keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard event.modifierFlags.contains([.command, .shift]),
+                  event.charactersIgnoringModifiers == "c" else { return }
+            self?.togglePanel()
+        }
+
         // Periodic data refresh
         appState.refresh()
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
@@ -88,7 +97,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func togglePanel() {
+        if panelVisible {
+            hidePanel()
+        } else {
+            showPanel()
+        }
+    }
+
     private func showPanel() {
+        guard !panelVisible else { return }
+        panelVisible = true
         panel.alphaValue = 0
         panel.orderFront(nil)
         NSAnimationContext.runAnimationGroup { context in
@@ -98,6 +117,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func hidePanel() {
+        guard panelVisible else { return }
+        panelVisible = false
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = 0.15
             panel.animator().alphaValue = 0
