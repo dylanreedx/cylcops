@@ -1,14 +1,24 @@
 import SwiftUI
+import AppKit
 
 struct SessionCardView: View {
     let session: AgentSession
+    @State private var isHovered = false
 
     private var statusColor: Color {
-        session.isActive ? .green : .gray
+        switch session.status {
+        case .running: return .green
+        case .idle: return .yellow
+        case .offline: return .gray
+        }
     }
 
     private var statusLabel: String {
-        session.isActive ? "ACTIVE" : "INACTIVE"
+        switch session.status {
+        case .running: return "RUNNING"
+        case .idle: return "IDLE"
+        case .offline: return "OFFLINE"
+        }
     }
 
     private var relativeTime: String {
@@ -39,13 +49,13 @@ struct SessionCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if session.isActive {
-                // Active: terminal preview
+            if session.status != .offline {
+                // Running or Idle: terminal preview
                 terminalPreview
                     .frame(height: 110)
                     .clipped()
             } else {
-                // Inactive: "last active" placeholder
+                // Offline: "last active" placeholder
                 ZStack {
                     Color.black.opacity(0.5)
                     VStack(spacing: 4) {
@@ -72,7 +82,7 @@ struct SessionCardView: View {
                         .background(statusColor.opacity(0.2))
                         .cornerRadius(4)
 
-                    if session.isActive && (session.linesAdded > 0 || session.linesRemoved > 0) {
+                    if session.status != .offline && (session.linesAdded > 0 || session.linesRemoved > 0) {
                         Text("+\(session.linesAdded)")
                             .font(.system(size: 9, weight: .medium, design: .monospaced))
                             .foregroundColor(.green)
@@ -83,7 +93,7 @@ struct SessionCardView: View {
 
                     Spacer()
 
-                    if session.isActive {
+                    if session.status == .running {
                         Text(elapsed)
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundColor(.white.opacity(0.5))
@@ -106,17 +116,23 @@ struct SessionCardView: View {
             .padding(8)
         }
         .frame(width: 220)
-        .background(Color.black.opacity(0.3))
+        .background(Color.black.opacity(isHovered ? 0.4 : 0.3))
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(session.isActive ? 0.15 : 0.08), lineWidth: 1)
+                .stroke(
+                    Color.white.opacity(isHovered ? 0.35 : (session.status != .offline ? 0.15 : 0.08)),
+                    lineWidth: isHovered ? 1.5 : 1
+                )
         )
-        .opacity(session.isActive ? 1.0 : 0.5)
+        .opacity(session.status != .offline ? 1.0 : (isHovered ? 1.0 : 0.5))
+        .scaleEffect(isHovered ? 1.02 : 1.0)
+        .animation(.easeInOut(duration: 0.15), value: isHovered)
+        .onHover { hovering in
+            isHovered = hovering
+        }
         .onTapGesture {
-            if session.isActive {
-                focusSession()
-            }
+            focusSession()
         }
     }
 
@@ -156,23 +172,58 @@ struct SessionCardView: View {
     }
 
     private func focusSession() {
-        // Activate Ghostty
-        let osascript = Process()
-        osascript.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-        osascript.arguments = ["-e", "tell application \"Ghostty\" to activate"]
-        osascript.standardOutput = Pipe()
-        osascript.standardError = Pipe()
-        try? osascript.run()
-        osascript.waitUntilExit()
+        let target = session.tmuxTarget.isEmpty ? session.projectName : session.tmuxTarget
 
-        // Switch tmux client to session
-        let tmux = Process()
-        tmux.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        let target = session.tmuxSession.isEmpty ? session.projectName : session.tmuxSession
-        tmux.arguments = ["tmux", "switch-client", "-t", target]
-        tmux.standardOutput = Pipe()
-        tmux.standardError = Pipe()
-        try? tmux.run()
-        tmux.waitUntilExit()
+        // Parse "session:window" target into components
+        let parts = target.split(separator: ":", maxSplits: 1)
+        let sessionName = String(parts[0])
+        let windowIndex: String? = parts.count > 1 ? String(parts[1]) : nil
+
+        // Try to find which Ghostty tab already has this tmux session attached
+        if let tabIndex = DataBridge().tmuxClientTabIndex(for: target), tabIndex >= 1, tabIndex <= 9 {
+            // Activate Ghostty and send Cmd+<N> to switch to the correct tab
+            let script = """
+                tell application "Ghostty" to activate
+                delay 0.1
+                tell application "System Events"
+                    keystroke "\(tabIndex)" using command down
+                end tell
+                """
+            let osascript = Process()
+            osascript.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            osascript.arguments = ["-e", script]
+            osascript.standardOutput = Pipe()
+            osascript.standardError = Pipe()
+            try? osascript.run()
+            osascript.waitUntilExit()
+        } else {
+            // Fallback: activate Ghostty and switch-client
+            let osascript = Process()
+            osascript.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            osascript.arguments = ["-e", "tell application \"Ghostty\" to activate"]
+            osascript.standardOutput = Pipe()
+            osascript.standardError = Pipe()
+            try? osascript.run()
+            osascript.waitUntilExit()
+
+            let tmux = Process()
+            tmux.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+            tmux.arguments = ["tmux", "switch-client", "-t", sessionName]
+            tmux.standardOutput = Pipe()
+            tmux.standardError = Pipe()
+            try? tmux.run()
+            tmux.waitUntilExit()
+        }
+
+        // Navigate to the specific tmux window if we have a window index
+        if let window = windowIndex {
+            let selectWindow = Process()
+            selectWindow.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+            selectWindow.arguments = ["tmux", "select-window", "-t", "\(sessionName):\(window)"]
+            selectWindow.standardOutput = Pipe()
+            selectWindow.standardError = Pipe()
+            try? selectWindow.run()
+            selectWindow.waitUntilExit()
+        }
     }
 }

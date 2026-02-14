@@ -129,6 +129,12 @@ struct AgentView: View {
         }
     }
 
+    // MARK: - Shared Grid Layout
+
+    private var twoRowGrid: [GridItem] {
+        [GridItem(.fixed(95), spacing: 8), GridItem(.fixed(95), spacing: 8)]
+    }
+
     // MARK: - Projects
 
     @ViewBuilder
@@ -140,42 +146,14 @@ struct AgentView: View {
                 .foregroundColor(.white.opacity(0.4))
             Spacer()
         } else {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 8) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHGrid(rows: twoRowGrid, spacing: 8) {
                     ForEach(appState.projects) { project in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(project.name)
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(.white)
-                                Spacer()
-                                Text("\(project.passedFeatures)/\(project.totalFeatures)")
-                                    .font(.system(size: 11, design: .monospaced))
-                                    .foregroundColor(.white.opacity(0.6))
-                            }
-
-                            GeometryReader { geo in
-                                ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(Color.white.opacity(0.1))
-                                        .frame(height: 6)
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(Color.green.opacity(0.8))
-                                        .frame(width: geo.size.width * project.progressPercent, height: 6)
-                                }
-                            }
-                            .frame(height: 6)
-                        }
-                        .padding(10)
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                        )
+                        ProjectCardView(project: project)
                     }
                 }
-                .padding(12)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
             }
         }
     }
@@ -191,52 +169,14 @@ struct AgentView: View {
                 .foregroundColor(.white.opacity(0.4))
             Spacer()
         } else {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 8) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHGrid(rows: twoRowGrid, spacing: 8) {
                     ForEach(appState.memories) { memory in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(memory.name)
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(.white)
-                                    .lineLimit(1)
-                                Spacer()
-                                if !memory.projectName.isEmpty {
-                                    Text(memory.projectName)
-                                        .font(.system(size: 9, design: .monospaced))
-                                        .foregroundColor(.white.opacity(0.4))
-                                }
-                            }
-
-                            Text(memory.content)
-                                .font(.system(size: 10))
-                                .foregroundColor(.white.opacity(0.6))
-                                .lineLimit(3)
-
-                            if !memory.tags.isEmpty {
-                                HStack(spacing: 4) {
-                                    ForEach(memory.tags, id: \.self) { tag in
-                                        Text(tag)
-                                            .font(.system(size: 8, weight: .medium))
-                                            .foregroundColor(.white.opacity(0.5))
-                                            .padding(.horizontal, 5)
-                                            .padding(.vertical, 2)
-                                            .background(Color.white.opacity(0.08))
-                                            .cornerRadius(3)
-                                    }
-                                }
-                            }
-                        }
-                        .padding(10)
-                        .background(Color.black.opacity(0.3))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                        )
+                        MemoryCardView(memory: memory)
                     }
                 }
-                .padding(12)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
             }
         }
     }

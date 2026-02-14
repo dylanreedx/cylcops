@@ -1,0 +1,937 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Cyclops — your notch, alive">
+
+  <!-- ============================================================
+       HERO — Choreographed Demo
+       ============================================================ -->
+  <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-24 relative">
+
+    <div class="animate-fade-in mb-8">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-2 border border-border text-text-muted text-xs font-mono tracking-wide">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+        open source &middot; macOS 13+
+      </span>
+    </div>
+
+    <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-center leading-[0.95] tracking-tight mb-6 animate-fade-up">
+      your notch, alive.
+    </h1>
+
+    <p class="text-text-muted text-base sm:text-lg md:text-xl text-center max-w-xl mb-12 animate-fade-up" style="animation-delay: 0.1s;">
+      A live Claude Code dashboard, hidden in&nbsp;the one place you never thought to&nbsp;look.
+    </p>
+
+    <div class="flex flex-wrap gap-4 justify-center mb-16 animate-fade-up" style="animation-delay: 0.2s;">
+      <a href="#download" class="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-accent text-bg font-semibold text-sm hover:bg-accent-bright transition-colors duration-200">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download for macOS
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 px-7 py-3 rounded-full border border-border text-text font-semibold text-sm hover:border-accent/40 hover:text-accent transition-all duration-200">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View Source
+      </a>
+    </div>
+
+    <!-- Mac Desktop — Choreographed Demo -->
+    <div class="w-full max-w-4xl mx-auto animate-fade-up relative" style="animation-delay: 0.3s;">
+      <div class="absolute inset-0 -inset-x-12 -inset-y-8 bg-accent/[0.06] rounded-[40px] blur-[60px] animate-glow-pulse pointer-events-none" aria-hidden="true"></div>
+
+      <div class="mac-screen relative" id="hero-screen">
+        <div class="mac-wallpaper"></div>
+
+        <!-- Menu Bar -->
+        <div class="mac-menubar">
+          <div class="mac-menubar-left">
+            <span class="text-[13px] font-medium">&#63743;</span>
+            <span class="font-semibold">Finder</span>
+            <span>File</span><span>Edit</span><span>View</span><span>Go</span>
+          </div>
+          <div class="mac-menubar-right">
+            <span>100%</span>
+            <svg width="14" height="9" viewBox="0 0 14 9" fill="none" style="opacity:0.7"><rect x=".5" y=".5" width="11" height="8" rx="1.5" stroke="white" stroke-opacity=".7"/><rect x="12" y="2.5" width="1.5" height="4" rx=".5" fill="white" fill-opacity=".5"/><rect x="1.5" y="1.5" width="9" height="6" rx=".5" fill="white" fill-opacity=".7"/></svg>
+            <span>9:41 AM</span>
+          </div>
+        </div>
+
+        <!-- Notch -->
+        <div class="notch-wrapper">
+          <div class="notch" id="hero-notch">
+            <div class="notch-tabs">
+              <span class="notch-tab active">SESSIONS</span>
+              <span class="notch-tab">PROJECTS</span>
+              <span class="notch-tab">MEMORIES</span>
+            </div>
+            <div class="notch-divider"></div>
+            <div class="notch-cards">
+
+              <!-- Card 1: web-app (Running) -->
+              <div class="mini-card" data-project="web-app">
+                <div class="mini-card-terminal">
+                  <div class="terminal-reel scrolling" style="--reel-duration:11s;--reel-offset:-90px">
+                    <div class="tl tl-w">&nbsp; import React from 'react'</div>
+                    <div class="tl tl-g">+ import &#123; motion &#125; from 'motion'</div>
+                    <div class="tl tl-g">+ import &#123; useAuth &#125; from './hooks'</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-r">- export default function App()</div>
+                    <div class="tl tl-g">+ export function App() &#123;</div>
+                    <div class="tl tl-g">+   const &#123; user &#125; = useAuth()</div>
+                    <div class="tl tl-r">-   const [c, setC] = useState(0)</div>
+                    <div class="tl tl-g">+   const [v, setV] = useState()</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+   useEffect(() =&gt; &#123;</div>
+                    <div class="tl tl-g">+     fetch('/api/data')</div>
+                    <div class="tl tl-g">+       .then(r =&gt; r.json())</div>
+                    <div class="tl tl-g">+       .then(setData)</div>
+                    <div class="tl tl-g">+   &#125;, [])</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+   if (!user) return &lt;Login /&gt;</div>
+                    <div class="tl tl-w">&nbsp;   return (</div>
+                    <div class="tl tl-r">-     &lt;div className="app"&gt;</div>
+                    <div class="tl tl-g">+     &lt;main className="shell"&gt;</div>
+                    <div class="tl tl-g">+       &lt;Sidebar /&gt;</div>
+                    <div class="tl tl-g">+       &lt;Content v=&#123;v&#125; /&gt;</div>
+                    <div class="tl tl-g">+     &lt;/main&gt;</div>
+                    <div class="tl tl-w">&nbsp;   )</div>
+                    <div class="tl tl-w">&nbsp; &#125;</div>
+                  </div>
+                </div>
+                <div class="mini-card-meta">
+                  <div class="flex items-center gap-1">
+                    <span class="mini-badge" style="background:rgba(74,222,128,.15);color:#4ade80">RUNNING</span>
+                    <span class="mini-diff" style="color:#4ade80">+234</span>
+                    <span class="mini-diff" style="color:#f87171">-89</span>
+                  </div>
+                  <div class="mini-card-name">web-app</div>
+                </div>
+              </div>
+
+              <!-- Card 2: api-server (Running) -->
+              <div class="mini-card" data-project="api-server">
+                <div class="mini-card-terminal">
+                  <div class="terminal-reel scrolling" style="--reel-duration:16s;--reel-offset:-85px">
+                    <div class="tl tl-w">&nbsp; app.get('/tasks', async (req) =&gt;</div>
+                    <div class="tl tl-g">+   const cache = redis.get(k)</div>
+                    <div class="tl tl-g">+   if (cache) return res.json(cache)</div>
+                    <div class="tl tl-w">&nbsp;   const tasks = db.query(sql)</div>
+                    <div class="tl tl-r">-   res.json(tasks)</div>
+                    <div class="tl tl-g">+   await redis.set(k, tasks, 300)</div>
+                    <div class="tl tl-g">+   return res.json(tasks)</div>
+                    <div class="tl tl-w">&nbsp; &#125;)</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+ app.post('/tasks', auth, async =&gt;</div>
+                    <div class="tl tl-g">+   const task = db.create(req.body)</div>
+                    <div class="tl tl-g">+   await notify(task.assignee)</div>
+                    <div class="tl tl-g">+   return res.status(201).json(task)</div>
+                    <div class="tl tl-g">+ &#125;)</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+ app.patch('/tasks/:id', auth, async</div>
+                    <div class="tl tl-g">+   const updated = db.update(id, body)</div>
+                    <div class="tl tl-r">-   // TODO: add validation</div>
+                    <div class="tl tl-g">+   validate(body, TaskSchema)</div>
+                    <div class="tl tl-g">+   return res.json(updated)</div>
+                    <div class="tl tl-g">+ &#125;)</div>
+                  </div>
+                </div>
+                <div class="mini-card-meta">
+                  <div class="flex items-center gap-1">
+                    <span class="mini-badge" style="background:rgba(74,222,128,.15);color:#4ade80">RUNNING</span>
+                    <span class="mini-diff" style="color:#4ade80">+127</span>
+                    <span class="mini-diff" style="color:#f87171">-43</span>
+                  </div>
+                  <div class="mini-card-name">api-server</div>
+                </div>
+              </div>
+
+              <!-- Card 3: ml-pipeline (Idle) -->
+              <div class="mini-card" data-project="ml-pipeline">
+                <div class="mini-card-terminal">
+                  <div class="terminal-reel scrolling" style="--reel-duration:19s;--reel-offset:-75px">
+                    <div class="tl tl-w">&nbsp; def train(config):</div>
+                    <div class="tl tl-g">+     wandb.init(project=config.name)</div>
+                    <div class="tl tl-w">&nbsp;     model = load(config.arch)</div>
+                    <div class="tl tl-r">-     opt = SGD(model.parameters())</div>
+                    <div class="tl tl-g">+     opt = AdamW(model.params(),</div>
+                    <div class="tl tl-g">+         lr=config.lr, wd=0.01)</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+     sched = CosineAnnealingLR(opt)</div>
+                    <div class="tl tl-w">&nbsp;     for epoch in range(epochs):</div>
+                    <div class="tl tl-w">&nbsp;         loss = train_epoch(model)</div>
+                    <div class="tl tl-g">+         sched.step()</div>
+                    <div class="tl tl-g">+         wandb.log(&#123;"loss": loss&#125;)</div>
+                    <div class="tl tl-d">&nbsp;</div>
+                    <div class="tl tl-g">+ def evaluate(model, data):</div>
+                    <div class="tl tl-g">+     model.eval()</div>
+                    <div class="tl tl-g">+     with torch.no_grad():</div>
+                    <div class="tl tl-g">+         preds = model(data.X)</div>
+                    <div class="tl tl-g">+     return accuracy(preds, data.y)</div>
+                  </div>
+                </div>
+                <div class="mini-card-meta">
+                  <div class="flex items-center gap-1">
+                    <span class="mini-badge" style="background:rgba(251,191,36,.15);color:#fbbf24">IDLE</span>
+                    <span class="mini-diff" style="color:#4ade80">+389</span>
+                    <span class="mini-diff" style="color:#f87171">-56</span>
+                  </div>
+                  <div class="mini-card-name">ml-pipeline</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Mock Terminal (appears on "click") -->
+        <div class="mock-terminal" id="hero-terminal">
+          <div class="terminal-chrome">
+            <span class="terminal-title">web-app &mdash; claude</span>
+          </div>
+          <div class="terminal-body" id="hero-term-body"></div>
+        </div>
+
+        <!-- Fake cursor -->
+        <svg class="demo-cursor" id="hero-cursor" viewBox="0 0 20 24" fill="none">
+          <path d="M1 1L1 19L5.2 14.8L8.8 22L11.5 20.8L8 13L14 13L1 1Z" fill="white" stroke="black" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+
+        <!-- Click ripple -->
+        <div class="click-ripple" id="hero-ripple"></div>
+
+        <!-- Desktop (empty) -->
+        <div class="flex-1"></div>
+
+        <!-- Dock -->
+        <div class="mac-dock">
+          <div class="dock-icon" style="background:linear-gradient(135deg,#2196F3,#1565C0)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#42A5F5,#1E88E5)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#1a1a1a,#333)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#66BB6A,#43A047)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#FF7043,#E64A19)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#FFA726,#FB8C00)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#EC407A,#C62828)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#AB47BC,#7B1FA2)"></div>
+          <div class="dock-icon" style="background:linear-gradient(135deg,#78909C,#455A64)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 animate-fade-in" style="animation-delay:1.5s">
+      <div class="flex flex-col items-center gap-2 text-text-dim text-xs">
+        <span>scroll</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="animate-bounce"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       INTRO
+       ============================================================ -->
+  <section class="py-24 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="reveal text-text-muted text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto">
+        Every Mac has a notch. Yours does nothing.<br class="hidden sm:block" />
+        <span class="text-text font-medium">Cyclops makes it a live mission control for Claude&nbsp;Code.</span>
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FEATURES
+       ============================================================ -->
+  <section class="py-24 px-6" id="features">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="reveal font-display text-3xl sm:text-4xl font-bold text-center mb-16">what you get</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 class="font-display text-lg font-bold mb-2">live sessions</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Watch Claude Code work across every project in real time. Running, idle, or offline — you always know.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h3 class="font-display text-lg font-bold mb-2">terminal previews</h3>
+          <p class="text-text-muted text-sm leading-relaxed">See actual diff output right in the notch. Green lines added, red lines removed. Diff stats at a glance.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          </div>
+          <h3 class="font-display text-lg font-bold mb-2">one-click focus</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Click any session to jump straight to that terminal window. Finds your tab and switches the tmux pane.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-4">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+          </div>
+          <h3 class="font-display text-lg font-bold mb-2">zero config</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Cyclops finds your sessions automatically by scanning <code class="text-accent text-xs font-mono bg-accent/5 px-1.5 py-0.5 rounded">~/.claude/projects/</code>. No setup needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       INTERACTIVE DEMO
+       ============================================================ -->
+  <section class="py-24 px-6" id="demo">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="reveal font-display text-3xl sm:text-4xl font-bold text-center mb-4">try it yourself</h2>
+      <p class="reveal text-text-muted text-center mb-12 max-w-lg mx-auto">Hover the screen to open the notch. Click a session to see what happens.</p>
+
+      <div class="reveal w-full max-w-4xl mx-auto">
+        <div class="mac-screen relative" id="interactive-screen">
+          <div class="mac-wallpaper"></div>
+
+          <div class="mac-menubar">
+            <div class="mac-menubar-left">
+              <span class="text-[13px] font-medium">&#63743;</span>
+              <span class="font-semibold">Finder</span>
+              <span>File</span><span>Edit</span><span>View</span>
+            </div>
+            <div class="mac-menubar-right">
+              <span>100%</span>
+              <svg width="14" height="9" viewBox="0 0 14 9" fill="none" style="opacity:0.7"><rect x=".5" y=".5" width="11" height="8" rx="1.5" stroke="white" stroke-opacity=".7"/><rect x="12" y="2.5" width="1.5" height="4" rx=".5" fill="white" fill-opacity=".5"/><rect x="1.5" y="1.5" width="9" height="6" rx=".5" fill="white" fill-opacity=".7"/></svg>
+              <span>9:41 AM</span>
+            </div>
+          </div>
+
+          <!-- Notch -->
+          <div class="notch-wrapper">
+            <div class="notch" id="interactive-notch">
+              <div class="notch-tabs">
+                <span class="notch-tab active">SESSIONS</span>
+                <span class="notch-tab">PROJECTS</span>
+                <span class="notch-tab">MEMORIES</span>
+              </div>
+              <div class="notch-divider"></div>
+              <div class="notch-cards">
+
+                <!-- Card 1 -->
+                <div class="mini-card interactive-card" data-project="web-app" data-title="web-app &mdash; claude">
+                  <div class="mini-card-terminal">
+                    <div class="terminal-reel scrolling" style="--reel-duration:13s;--reel-offset:-85px">
+                      <div class="tl tl-w">&nbsp; import React from 'react'</div>
+                      <div class="tl tl-g">+ import &#123; motion &#125; from 'motion'</div>
+                      <div class="tl tl-g">+ import &#123; useAuth &#125; from './hooks'</div>
+                      <div class="tl tl-r">- export default function App()</div>
+                      <div class="tl tl-g">+ export function App() &#123;</div>
+                      <div class="tl tl-g">+   const &#123; user &#125; = useAuth()</div>
+                      <div class="tl tl-r">-   const [c, setC] = useState(0)</div>
+                      <div class="tl tl-g">+   const [v, setV] = useState()</div>
+                      <div class="tl tl-g">+   useEffect(() =&gt; &#123;</div>
+                      <div class="tl tl-g">+     fetch('/api/data')</div>
+                      <div class="tl tl-g">+       .then(r =&gt; r.json())</div>
+                      <div class="tl tl-g">+   &#125;, [])</div>
+                      <div class="tl tl-w">&nbsp;   return (</div>
+                      <div class="tl tl-r">-     &lt;div&gt;</div>
+                      <div class="tl tl-g">+     &lt;main&gt;</div>
+                      <div class="tl tl-g">+       &lt;Sidebar /&gt;</div>
+                      <div class="tl tl-g">+       &lt;Content /&gt;</div>
+                      <div class="tl tl-g">+     &lt;/main&gt;</div>
+                      <div class="tl tl-w">&nbsp;   )</div>
+                      <div class="tl tl-w">&nbsp; &#125;</div>
+                    </div>
+                  </div>
+                  <div class="mini-card-meta">
+                    <div class="flex items-center gap-1">
+                      <span class="mini-badge" style="background:rgba(74,222,128,.15);color:#4ade80">RUNNING</span>
+                      <span class="mini-diff" style="color:#4ade80">+234</span>
+                      <span class="mini-diff" style="color:#f87171">-89</span>
+                    </div>
+                    <div class="mini-card-name">web-app</div>
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="mini-card interactive-card" data-project="api-server" data-title="api-server &mdash; claude">
+                  <div class="mini-card-terminal">
+                    <div class="terminal-reel scrolling" style="--reel-duration:17s;--reel-offset:-80px">
+                      <div class="tl tl-w">&nbsp; app.get('/tasks', async =&gt; &#123;</div>
+                      <div class="tl tl-g">+   const cache = redis.get(k)</div>
+                      <div class="tl tl-g">+   if (cache) return res.json()</div>
+                      <div class="tl tl-w">&nbsp;   const tasks = db.query(sql)</div>
+                      <div class="tl tl-r">-   res.json(tasks)</div>
+                      <div class="tl tl-g">+   await redis.set(k, tasks)</div>
+                      <div class="tl tl-g">+   return res.json(tasks)</div>
+                      <div class="tl tl-w">&nbsp; &#125;)</div>
+                      <div class="tl tl-d">&nbsp;</div>
+                      <div class="tl tl-g">+ app.post('/tasks', auth, async</div>
+                      <div class="tl tl-g">+   const task = db.create(body)</div>
+                      <div class="tl tl-g">+   await notify(task.assignee)</div>
+                      <div class="tl tl-g">+   return res.status(201).json()</div>
+                      <div class="tl tl-g">+ &#125;)</div>
+                      <div class="tl tl-d">&nbsp;</div>
+                      <div class="tl tl-g">+ app.delete('/tasks/:id', auth</div>
+                      <div class="tl tl-g">+   await db.destroy(id)</div>
+                      <div class="tl tl-g">+   return res.status(204).end()</div>
+                    </div>
+                  </div>
+                  <div class="mini-card-meta">
+                    <div class="flex items-center gap-1">
+                      <span class="mini-badge" style="background:rgba(74,222,128,.15);color:#4ade80">RUNNING</span>
+                      <span class="mini-diff" style="color:#4ade80">+127</span>
+                      <span class="mini-diff" style="color:#f87171">-43</span>
+                    </div>
+                    <div class="mini-card-name">api-server</div>
+                  </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="mini-card interactive-card" data-project="ml-pipeline" data-title="ml-pipeline &mdash; claude">
+                  <div class="mini-card-terminal">
+                    <div class="terminal-reel scrolling" style="--reel-duration:20s;--reel-offset:-70px">
+                      <div class="tl tl-w">&nbsp; def train(config):</div>
+                      <div class="tl tl-g">+     wandb.init(project=name)</div>
+                      <div class="tl tl-w">&nbsp;     model = load(config.arch)</div>
+                      <div class="tl tl-r">-     opt = SGD(model.params())</div>
+                      <div class="tl tl-g">+     opt = AdamW(model.params(),</div>
+                      <div class="tl tl-g">+         lr=cfg.lr, wd=0.01)</div>
+                      <div class="tl tl-g">+     sched = CosineAnnealing(opt)</div>
+                      <div class="tl tl-w">&nbsp;     for epoch in range(n):</div>
+                      <div class="tl tl-w">&nbsp;         loss = train_epoch()</div>
+                      <div class="tl tl-g">+         sched.step()</div>
+                      <div class="tl tl-g">+         wandb.log(&#123;"l": loss&#125;)</div>
+                      <div class="tl tl-d">&nbsp;</div>
+                      <div class="tl tl-g">+ def evaluate(model, data):</div>
+                      <div class="tl tl-g">+     model.eval()</div>
+                      <div class="tl tl-g">+     with torch.no_grad():</div>
+                      <div class="tl tl-g">+         p = model(data.X)</div>
+                      <div class="tl tl-g">+     return accuracy(p, data.y)</div>
+                    </div>
+                  </div>
+                  <div class="mini-card-meta">
+                    <div class="flex items-center gap-1">
+                      <span class="mini-badge" style="background:rgba(251,191,36,.15);color:#fbbf24">IDLE</span>
+                      <span class="mini-diff" style="color:#4ade80">+389</span>
+                      <span class="mini-diff" style="color:#f87171">-56</span>
+                    </div>
+                    <div class="mini-card-name">ml-pipeline</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Mock Terminal for interactive demo -->
+          <div class="mock-terminal" id="interactive-terminal">
+            <div class="terminal-chrome">
+              <span class="terminal-title" id="interactive-term-title">web-app &mdash; claude</span>
+            </div>
+            <div class="terminal-body" id="interactive-term-body"></div>
+          </div>
+
+          <div class="flex-1"></div>
+
+          <div class="mac-dock">
+            <div class="dock-icon" style="background:linear-gradient(135deg,#2196F3,#1565C0)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#42A5F5,#1E88E5)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#1a1a1a,#333)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#66BB6A,#43A047)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#FF7043,#E64A19)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#FFA726,#FB8C00)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#EC407A,#C62828)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#AB47BC,#7B1FA2)"></div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#78909C,#455A64)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       HOW IT WORKS
+       ============================================================ -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal font-display text-3xl sm:text-4xl font-bold text-center mb-16">how it works</h2>
+      <div class="space-y-12">
+        <div class="reveal flex gap-6 items-start">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center font-display font-bold text-accent text-sm">1</div>
+          <div>
+            <h3 class="font-display font-bold text-lg mb-1">scans your sessions</h3>
+            <p class="text-text-muted text-sm leading-relaxed">Cyclops watches <code class="font-mono text-xs text-accent bg-accent/5 px-1.5 py-0.5 rounded">~/.claude/projects/</code> for JSONL session files. Modification time tells it whether a session is running, idle, or offline.</p>
+          </div>
+        </div>
+        <div class="reveal flex gap-6 items-start">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center font-display font-bold text-accent text-sm">2</div>
+          <div>
+            <h3 class="font-display font-bold text-lg mb-1">reads your terminals</h3>
+            <p class="text-text-muted text-sm leading-relaxed">Queries tmux to capture pane content and git diff stats. Detects Claude Code panes by matching version strings.</p>
+          </div>
+        </div>
+        <div class="reveal flex gap-6 items-start">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center font-display font-bold text-accent text-sm">3</div>
+          <div>
+            <h3 class="font-display font-bold text-lg mb-1">lives in your notch</h3>
+            <p class="text-text-muted text-sm leading-relaxed">An NSPanel at shielding window level — above everything. Hover to expand, move away to collapse. Always there, never in the way.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       DOWNLOAD
+       ============================================================ -->
+  <section class="py-24 px-6" id="download">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="reveal font-display text-3xl sm:text-4xl font-bold mb-4">get cyclops</h2>
+      <p class="reveal text-text-muted mb-12">Free and open source. Requires macOS 13+ and a Mac with a notch.</p>
+
+      <div class="reveal grid grid-cols-1 sm:grid-cols-2 gap-5 text-left mb-12">
+        <div class="bg-surface-2 border border-border rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <h3 class="font-display font-bold text-lg">download .dmg</h3>
+          </div>
+          <p class="text-text-muted text-sm mb-5 leading-relaxed">Drag to Applications and launch. Since this isn&rsquo;t notarized, right-click &rarr; Open on first launch.</p>
+          <a href="#" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-bg font-semibold text-sm hover:bg-accent-bright transition-colors">Download Cyclops.dmg</a>
+        </div>
+
+        <div class="bg-surface-2 border border-border rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3 class="font-display font-bold text-lg">build from source</h3>
+          </div>
+          <p class="text-text-muted text-sm mb-5 leading-relaxed">Clone the repo and build with Swift. Zero dependencies &mdash; just Apple frameworks.</p>
+          <div class="code-block text-xs">
+            <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/you/cyclops</span></div>
+            <div><span class="prompt">$ </span><span class="cmd">cd Cyclops &amp;&amp; swift build</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <a href="#" class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-surface-2 border border-border text-text-muted text-sm hover:border-[#ff6154]/30 hover:text-[#ff6154] transition-all">
+          <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M128 0C57.308 0 0 57.308 0 128s57.308 128 128 128 128-57.308 128-128S198.692 0 128 0zm-8 176h-24V96h24v80zm48 0h-24v-48h-8v-32h32v80z"/></svg>
+          Launching on Product Hunt &mdash; stay tuned
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="py-16 px-6 border-t border-border">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="3" fill="#34d399"/>
+          <line x1="12" y1="2" x2="12" y2="7" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="17" x2="12" y2="22" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2" y1="12" x2="7" y2="12" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="17" y1="12" x2="22" y2="12" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="4.93" y1="4.93" x2="8.46" y2="8.46" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15.54" y1="15.54" x2="19.07" y2="19.07" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="4.93" y1="19.07" x2="8.46" y2="15.54" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15.54" y1="8.46" x2="19.07" y2="4.93" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="font-display font-bold text-sm tracking-wide">cyclops</span>
+      </div>
+      <div class="flex items-center gap-6 text-text-dim text-xs">
+        <a href="https://github.com" target="_blank" rel="noopener" class="hover:text-text transition-colors">GitHub</a>
+        <span>&middot;</span>
+        <span>MIT License</span>
+        <span>&middot;</span>
+        <span>Built for Claude Code</span>
+      </div>
+    </div>
+  </footer>
+
+
+<script>
+  // ================================================================
+  // HERO CHOREOGRAPHY
+  // ================================================================
+
+  const TERM_CONTENT = {
+    'web-app': [
+      ['\u25CF Update(src/App.tsx)', 'c-white'],
+      ['\u2575  Added 7 lines, removed 3 lines', 'c-dim'],
+      ['  14     import React from \'react\'', 'c-ctx'],
+      ['  15 -   import { legacy } from \'./old\'', 'c-del'],
+      ['  16 -   import { compat } from \'./shim\'', 'c-del'],
+      ['  15 +   import { useAuth } from \'./hooks\'', 'c-add'],
+      ['  16 +   import { motion } from \'motion\'', 'c-add'],
+      ['  17', 'c-ctx'],
+      ['  18     export function App() {', 'c-ctx'],
+      ['  19 -     const [c, setC] = useState(0)', 'c-del'],
+      ['  19 +     const { user } = useAuth()', 'c-add'],
+      ['  20 +     const [view, setView] = useState()', 'c-add'],
+      ['  21       return (', 'c-ctx'],
+      ['  22 -       <div className="app">', 'c-del'],
+      ['  22 +       <main className="shell">', 'c-add'],
+      ['  23 +         <Sidebar />', 'c-add'],
+      ['  24 +         <Content v={view} />', 'c-add'],
+      ['  25 +       </main>', 'c-add'],
+    ],
+    'api-server': [
+      ['\u25CF Update(routes/tasks.ts)', 'c-white'],
+      ['\u2575  Added 4 lines, removed 1 line', 'c-dim'],
+      ['  23     app.get(\'/tasks\', async (req, res) => {', 'c-ctx'],
+      ['  24 +     const cached = await redis.get(key)', 'c-add'],
+      ['  25 +     if (cached) return res.json(cached)', 'c-add'],
+      ['  26       const tasks = await db.query(sql)', 'c-ctx'],
+      ['  27 -     res.json(tasks)', 'c-del'],
+      ['  27 +     await redis.set(key, tasks, \'EX\', 300)', 'c-add'],
+      ['  28 +     return res.json(tasks)', 'c-add'],
+      ['  29     })', 'c-ctx'],
+      ['', 'c-dim'],
+      ['\u25CF Update(lib/cache.ts)', 'c-white'],
+      ['\u2575  Added 6 lines (new file)', 'c-dim'],
+      ['   1 +   import Redis from \'ioredis\'', 'c-add'],
+      ['   2 +', 'c-add'],
+      ['   3 +   export const redis = new Redis({', 'c-add'],
+      ['   4 +     host: process.env.REDIS_HOST,', 'c-add'],
+      ['   5 +     port: 6379,', 'c-add'],
+      ['   6 +   })', 'c-add'],
+    ],
+    'ml-pipeline': [
+      ['\u25CF Update(train.py)', 'c-white'],
+      ['\u2575  Added 5 lines, removed 1 line', 'c-dim'],
+      ['   8     def train(config):', 'c-ctx'],
+      ['   9       model = load(config.arch)', 'c-ctx'],
+      ['  10 -     opt = SGD(model.parameters())', 'c-del'],
+      ['  10 +     opt = AdamW(model.parameters(),', 'c-add'],
+      ['  11 +         lr=config.lr, weight_decay=0.01)', 'c-add'],
+      ['  12 +     sched = CosineAnnealingLR(opt)', 'c-add'],
+      ['  13       for epoch in range(epochs):', 'c-ctx'],
+      ['  14         loss = train_epoch(model)', 'c-ctx'],
+      ['  15 +       sched.step()', 'c-add'],
+      ['  16 +       wandb.log({"loss": loss})', 'c-add'],
+      ['', 'c-dim'],
+      ['\u25CF Update(config.yaml)', 'c-white'],
+      ['\u2575  Added 2 lines, removed 1 line', 'c-dim'],
+      ['   3     optimizer:', 'c-ctx'],
+      ['   4 -     type: sgd', 'c-del'],
+      ['   4 +     type: adamw', 'c-add'],
+      ['   5 +     weight_decay: 0.01', 'c-add'],
+    ],
+  };
+
+  function delay(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  function getCenter(el, container) {
+    const sr = container.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    return {
+      x: er.left - sr.left + er.width * 0.4,
+      y: er.top - sr.top + er.height * 0.5
+    };
+  }
+
+  // ================================================================
+  // MINI-CARD STREAMING (line-by-line jumps, not smooth scroll)
+  // ================================================================
+
+  function streamMiniCards() {
+    document.querySelectorAll('.terminal-reel').forEach((reel, idx) => {
+      reel.classList.remove('scrolling');
+      reel.style.removeProperty('animation');
+
+      const lines = reel.querySelectorAll('.tl');
+      const lineH = 6.75; // 4.5px font * 1.5 line-height
+      const visible = 10;
+      const scrollable = Math.max(0, lines.length - visible);
+      let pos = 0;
+
+      function tick() {
+        if (pos >= scrollable) {
+          setTimeout(() => {
+            reel.style.transform = 'translateY(0)';
+            pos = 0;
+            setTimeout(tick, 1200 + Math.random() * 800);
+          }, 2500 + Math.random() * 1000);
+          return;
+        }
+
+        pos++;
+        reel.style.transform = `translateY(-${pos * lineH}px)`;
+
+        // Claude-like rhythm: bursts then pauses
+        const r = Math.random();
+        let next;
+        if (r > 0.55) next = 100 + Math.random() * 100;       // fast burst
+        else if (r > 0.2) next = 300 + Math.random() * 250;   // medium
+        else next = 600 + Math.random() * 500;                 // pause
+
+        setTimeout(tick, next);
+      }
+
+      setTimeout(tick, 600 + idx * 900);
+    });
+  }
+
+  // ================================================================
+  // TERMINAL STREAMING (Claude's distinctive pace)
+  // ================================================================
+
+  function getPreDelay(text) {
+    if (text.startsWith('\u25CF')) return 300;
+    return 0;
+  }
+
+  function getPostDelay(text, cls) {
+    if (text.startsWith('\u25CF')) return 200;
+    if (text.startsWith('\u2575')) return 250;
+    if (cls === 'c-del' || cls === 'c-add') return 75;
+    if (cls === 'c-ctx') return 120;
+    if (!text.trim()) return 180;
+    return 150;
+  }
+
+  async function streamTerminal(body, lines) {
+    body.innerHTML = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const [text, cls] = lines[i];
+
+      const pre = getPreDelay(text);
+      if (pre > 0) await delay(pre);
+
+      const div = document.createElement('div');
+      div.className = 'term-line ' + cls;
+      div.textContent = text || '\u00A0';
+      body.appendChild(div);
+
+      await delay(15);
+      div.classList.add('typed');
+
+      body.scrollTop = body.scrollHeight;
+
+      await delay(getPostDelay(text, cls));
+    }
+  }
+
+  // --- Hero Demo ---
+
+  async function heroLoop() {
+    const screen = document.getElementById('hero-screen');
+    const notch = document.getElementById('hero-notch');
+    const cursor = document.getElementById('hero-cursor');
+    const terminal = document.getElementById('hero-terminal');
+    const termBody = document.getElementById('hero-term-body');
+    const ripple = document.getElementById('hero-ripple');
+    const cards = notch.querySelectorAll('.mini-card');
+
+    if (!screen || !notch) return;
+
+    // Pause when not in viewport
+    let visible = true;
+    const obs = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.2 });
+    obs.observe(screen);
+
+    while (true) {
+      // Wait until visible
+      while (!visible) await delay(200);
+
+      // Reset state
+      notch.classList.remove('open');
+      cursor.classList.remove('visible', 'fast');
+      terminal.classList.remove('visible');
+      cards.forEach(c => c.classList.remove('hovered', 'clicked'));
+      cursor.style.left = '75%';
+      cursor.style.top = '70%';
+      termBody.innerHTML = '';
+      terminal.querySelector('.terminal-title').textContent = '';
+
+      await delay(1800);
+      if (!visible) continue;
+
+      // 1. Open notch
+      notch.classList.add('open');
+      await delay(900);
+
+      // 2. Cursor enters
+      cursor.classList.add('visible');
+      await delay(400);
+
+      // 3. Hover card 0
+      const pos0 = getCenter(cards[0], screen);
+      cursor.style.left = pos0.x + 'px';
+      cursor.style.top = pos0.y + 'px';
+      await delay(700);
+      cards[0].classList.add('hovered');
+      await delay(1200);
+
+      // 4. Move to card 1
+      cards[0].classList.remove('hovered');
+      const pos1 = getCenter(cards[1], screen);
+      cursor.style.left = pos1.x + 'px';
+      cursor.style.top = pos1.y + 'px';
+      await delay(500);
+      cards[1].classList.add('hovered');
+      await delay(1200);
+
+      // 5. Move to card 2
+      cards[1].classList.remove('hovered');
+      const pos2 = getCenter(cards[2], screen);
+      cursor.style.left = pos2.x + 'px';
+      cursor.style.top = pos2.y + 'px';
+      await delay(500);
+      cards[2].classList.add('hovered');
+      await delay(800);
+
+      // 6. Back to card 0 and click
+      cards[2].classList.remove('hovered');
+      cursor.classList.add('fast');
+      const posClick = getCenter(cards[0], screen);
+      cursor.style.left = posClick.x + 'px';
+      cursor.style.top = posClick.y + 'px';
+      await delay(500);
+      cards[0].classList.add('hovered');
+      await delay(300);
+
+      // Click!
+      cards[0].classList.remove('hovered');
+      cards[0].classList.add('clicked');
+      ripple.style.left = posClick.x + 'px';
+      ripple.style.top = posClick.y + 'px';
+      ripple.classList.remove('active');
+      void ripple.offsetWidth;
+      ripple.classList.add('active');
+      await delay(200);
+      cards[0].classList.remove('clicked');
+      cursor.classList.remove('fast');
+
+      // 7. Close notch, show terminal
+      notch.classList.remove('open');
+      await delay(400);
+
+      const project = cards[0].dataset.project;
+      terminal.querySelector('.terminal-title').textContent = project + ' \u2014 claude';
+      terminal.classList.add('visible');
+
+      // Cursor idles near terminal
+      cursor.style.left = '60%';
+      cursor.style.top = '50%';
+
+      // Stream lines at Claude's pace — awaits full completion
+      await streamTerminal(termBody, TERM_CONTENT[project]);
+      await delay(1500);
+
+      // 8. Close terminal
+      terminal.classList.remove('visible');
+      cursor.classList.remove('visible');
+      await delay(1500);
+    }
+  }
+
+  // ================================================================
+  // INTERACTIVE DEMO
+  // ================================================================
+
+  function setupInteractive() {
+    const screen = document.getElementById('interactive-screen');
+    const notch = document.getElementById('interactive-notch');
+    const terminal = document.getElementById('interactive-terminal');
+    const termBody = document.getElementById('interactive-term-body');
+    const termTitle = document.getElementById('interactive-term-title');
+    const cards = screen.querySelectorAll('.interactive-card');
+
+    if (!screen || !notch) return;
+
+    let termOpen = false;
+    let closeTimer = null;
+
+    // Hover to open notch
+    screen.addEventListener('mouseenter', () => {
+      notch.classList.add('open');
+    });
+
+    screen.addEventListener('mouseleave', () => {
+      if (!termOpen) {
+        notch.classList.remove('open');
+      }
+    });
+
+    // Card hover
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => card.classList.add('hovered'));
+      card.addEventListener('mouseleave', () => card.classList.remove('hovered'));
+
+      // Card click — open terminal
+      card.addEventListener('click', () => {
+        const project = card.dataset.project;
+        const lines = TERM_CONTENT[project];
+
+        if (!lines) return;
+
+        // Close notch, open terminal
+        termOpen = true;
+        notch.classList.remove('open');
+        card.classList.add('clicked');
+        setTimeout(() => card.classList.remove('clicked'), 200);
+
+        termTitle.textContent = card.dataset.title || (project + ' \u2014 claude');
+        terminal.classList.add('visible');
+        streamTerminal(termBody, lines);
+
+        // Auto-close after streaming completes (~5s + buffer)
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = setTimeout(() => {
+          terminal.classList.remove('visible');
+          termOpen = false;
+        }, 7500);
+      });
+    });
+
+    // Click outside terminal to close
+    screen.addEventListener('click', (e) => {
+      if (termOpen && !terminal.contains(e.target) && !e.target.closest('.mini-card')) {
+        terminal.classList.remove('visible');
+        termOpen = false;
+        if (closeTimer) clearTimeout(closeTimer);
+      }
+    });
+  }
+
+  // ================================================================
+  // SCROLL REVEAL
+  // ================================================================
+
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('revealed');
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+  // ================================================================
+  // INIT
+  // ================================================================
+
+  streamMiniCards();
+  heroLoop();
+  setupInteractive();
+</script>
+</Layout>

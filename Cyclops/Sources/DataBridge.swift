@@ -206,20 +206,34 @@ struct DataBridge {
         projectInfos.sort { $0.mtime > $1.mtime }
         let top = projectInfos.prefix(5)
 
-        // 3. Build tmux CWD→session map (one call for all active sessions)
-        let tmuxOutput = runShell("/usr/bin/env", ["tmux", "list-panes", "-a", "-F", "#{pane_current_path}\t#{session_name}"])
-        var cwdToTmux: [String: String] = [:]
+        // 3. Build tmux pane maps (one call for all sessions)
+        //    Claude Code's pane_current_command is its version string (e.g. "2.1.41")
+        //    Two maps: agent panes (Claude Code) get priority over regular panes
+        let tmuxOutput = runShell("/usr/bin/env", ["tmux", "list-panes", "-a", "-F", "#{pane_current_path}\t#{session_name}\t#{window_index}\t#{pane_current_command}"])
+        var cwdToAgentTarget: [String: String] = [:]   // only Claude Code panes
+        var cwdToAnyTarget: [String: String] = [:]      // all panes (navigation fallback)
+        var tmuxSessionNames: Set<String> = []
         for line in tmuxOutput.split(separator: "\n") {
-            let parts = line.split(separator: "\t", maxSplits: 1)
-            guard parts.count == 2 else { continue }
-            cwdToTmux[String(parts[0])] = String(parts[1])
+            let parts = line.split(separator: "\t", maxSplits: 3)
+            guard parts.count >= 3 else { continue }
+            let cwdPath = String(parts[0])
+            let sessionName = String(parts[1])
+            let windowIndex = String(parts[2])
+            let command = parts.count > 3 ? String(parts[3]) : ""
+            let target = "\(sessionName):\(windowIndex)"
+            cwdToAnyTarget[cwdPath] = target
+            tmuxSessionNames.insert(sessionName)
+            // Claude Code reports its version as pane_current_command (e.g. "2.1.41")
+            if command.range(of: #"^\d+\.\d+\.\d+$"#, options: .regularExpression) != nil {
+                cwdToAgentTarget[cwdPath] = target
+            }
         }
 
         // 4. Build AgentSession for each project
         var sessions: [AgentSession] = []
         for info in top {
             let decodedPath = decodePath(info.encodedName)
-            let isActive = now.timeIntervalSince(info.mtime) < 120
+            let recentlyActive = now.timeIntervalSince(info.mtime) < 120
 
             // Read JSONL metadata from the most recent file
             let metadata = readJSONLMetadata(at: info.jsonlPath)
@@ -238,19 +252,91 @@ struct DataBridge {
 
             let projectName = (workspacePath as NSString).lastPathComponent
 
-            // Map active sessions to tmux
-            let tmuxSession = isActive ? (cwdToTmux[workspacePath] ?? "") : ""
+            // Map to tmux target — prefer Claude Code panes over regular panes
+            // Path-based strategies (1-3) check agent map first, then fallback to any map
+            var tmuxTarget = ""
+            var foundAgentPane = false
+
+            for map in [cwdToAgentTarget, cwdToAnyTarget] {
+                guard tmuxTarget.isEmpty else { break }
+                let isAgentMap = map.count == cwdToAgentTarget.count && map == cwdToAgentTarget
+
+                // 1. Exact CWD match
+                if let target = map[workspacePath] {
+                    tmuxTarget = target
+                    if isAgentMap { foundAgentPane = true }
+                }
+                // 2. Pane path is inside workspace
+                if tmuxTarget.isEmpty {
+                    for (panePath, target) in map {
+                        if panePath.hasPrefix(workspacePath + "/") {
+                            tmuxTarget = target
+                            if isAgentMap { foundAgentPane = true }
+                            break
+                        }
+                    }
+                }
+                // 3. Workspace path is inside pane path
+                if tmuxTarget.isEmpty {
+                    for (panePath, target) in map {
+                        if workspacePath.hasPrefix(panePath + "/") {
+                            tmuxTarget = target
+                            if isAgentMap { foundAgentPane = true }
+                            break
+                        }
+                    }
+                }
+            }
+
+            // Name-based fallbacks (navigation only, never affect status)
+            // 4. Case-insensitive project name match
+            if tmuxTarget.isEmpty {
+                let lowerProject = projectName.lowercased()
+                for name in tmuxSessionNames {
+                    if name.lowercased() == lowerProject {
+                        tmuxTarget = name
+                        break
+                    }
+                }
+            }
+            // 5. Session name appears as path component in workspace
+            if tmuxTarget.isEmpty {
+                let pathComponents = workspacePath.lowercased().split(separator: "/").map { String($0) }
+                for name in tmuxSessionNames {
+                    if pathComponents.contains(name.lowercased()) {
+                        tmuxTarget = name
+                        break
+                    }
+                }
+            }
+            // 6. Exact project name in session set
+            if tmuxTarget.isEmpty, tmuxSessionNames.contains(projectName) {
+                tmuxTarget = projectName
+            }
+
+            // Determine 3-state status:
+            // - running: JSONL written recently (Claude actively working)
+            // - idle: found a Claude Code pane (version-string process) at this path
+            // - offline: no Claude Code process found
+            let status: SessionStatus
+            if recentlyActive {
+                status = .running
+            } else if foundAgentPane {
+                status = .idle
+            } else {
+                status = .offline
+            }
 
             var session = AgentSession(
                 id: sessionId,
                 projectName: projectName,
                 workspacePath: workspacePath,
                 lastActivityDate: info.mtime,
-                isActive: isActive
+                status: status
             )
             session.gitBranch = gitBranch
             session.claudeVersion = version
-            session.tmuxSession = tmuxSession
+            session.tmuxTarget = tmuxTarget
             sessions.append(session)
         }
 
@@ -345,6 +431,60 @@ struct DataBridge {
         return (added, removed)
     }
 
+    /// Returns the 1-based Ghostty tab index for a given tmux target (either `"session:window"` or just `"session"`).
+    /// Uses process tree: Ghostty PID → child shell PIDs → their TTYs → match against tmux client TTYs.
+    func tmuxClientTabIndex(for target: String) -> Int? {
+        // Extract session name from "session:window" target
+        let sessionName = String(target.split(separator: ":").first ?? Substring(target))
+        // 1. Get tmux clients: map TTY → session name
+        let clientOutput = runShell("/usr/bin/env", ["tmux", "list-clients", "-F", "#{client_tty}\t#{client_session}"])
+        guard !clientOutput.isEmpty else { return nil }
+
+        var ttyToSession: [String: String] = [:]
+        for line in clientOutput.split(separator: "\n") {
+            let parts = line.split(separator: "\t", maxSplits: 1)
+            guard parts.count == 2 else { continue }
+            ttyToSession[String(parts[0])] = String(parts[1])
+        }
+
+        // 2. Find Ghostty's PID
+        let ghosttyPidStr = runShell("/usr/bin/pgrep", ["-x", "ghostty"])
+        guard !ghosttyPidStr.isEmpty else { return nil }
+        let ghosttyPid = ghosttyPidStr.components(separatedBy: "\n").first ?? ""
+        guard !ghosttyPid.isEmpty else { return nil }
+
+        // 3. Get direct child PIDs of Ghostty (one shell per tab)
+        let childrenStr = runShell("/usr/bin/pgrep", ["-P", ghosttyPid])
+        guard !childrenStr.isEmpty else { return nil }
+        let childPids = childrenStr.components(separatedBy: "\n").filter { !$0.isEmpty }
+
+        // 4. Map each child PID to its TTY
+        struct TabInfo {
+            let tty: String
+            let pid: String
+        }
+        var ghosttyTabs: [TabInfo] = []
+        for pid in childPids {
+            let ttyOutput = runShell("/bin/ps", ["-o", "tty=", "-p", pid])
+            guard !ttyOutput.isEmpty else { continue }
+            // ps outputs like "s003" — prefix with /dev/tty
+            let tty = "/dev/tty" + ttyOutput
+            ghosttyTabs.append(TabInfo(tty: tty, pid: pid))
+        }
+
+        // 5. Sort by TTY for tab creation order
+        ghosttyTabs.sort { $0.tty < $1.tty }
+
+        // 6. Find which tab has the target tmux session
+        for (index, tab) in ghosttyTabs.enumerated() {
+            if let session = ttyToSession[tab.tty], session == sessionName {
+                return index + 1
+            }
+        }
+
+        return nil
+    }
+
     func fetchMemories() -> [Memory] {
         let dbPaths = discoverDBPaths()
         var allMemories: [Memory] = []
@@ -352,16 +492,17 @@ struct DataBridge {
 
         for dbPath in dbPaths {
             let rows = runQuery("""
-                SELECT id, name, content, tags, project_name, created_at
-                FROM memories
-                ORDER BY created_at DESC
+                SELECT m.id, m.name, m.content, m.tags, p.name AS project_name, m.created_at
+                FROM memories m
+                LEFT JOIN projects p ON m.project_id = p.id
+                ORDER BY m.created_at DESC
                 LIMIT 20
                 """, dbPath: dbPath)
 
             for row in rows {
                 let createdAt: Date
                 if let ts = Double(row["created_at"] ?? "") {
-                    createdAt = Date(timeIntervalSince1970: ts / 1000)
+                    createdAt = Date(timeIntervalSince1970: ts)
                 } else {
                     createdAt = now
                 }

@@ -22,6 +22,8 @@ class CyclopsWindow: NSPanel {
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
 
+        acceptsMouseMovedEvents = true
+
         // Make it behave like a floating overlay
         collectionBehavior = [
             .fullScreenAuxiliary,
@@ -32,7 +34,7 @@ class CyclopsWindow: NSPanel {
     }
 
     // Prevent window from becoming key or main (no focus stealing)
-    override var canBecomeKey: Bool { false }
+    override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 
     /// Register this window with the CGSSpace for top-level z-ordering

@@ -1,0 +1,559 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Syne Variable', 'Syne', sans-serif;
+  --font-body: 'Lexend', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-bg: #050505;
+  --color-surface: #0c0c0c;
+  --color-surface-2: #151515;
+  --color-surface-3: #1e1e1e;
+  --color-accent: #34d399;
+  --color-accent-bright: #6ee7b7;
+  --color-accent-dim: #059669;
+  --color-danger: #f87171;
+  --color-warn: #fbbf24;
+  --color-text: #fafaf9;
+  --color-text-muted: #a1a1aa;
+  --color-text-dim: #52525b;
+  --color-border: #222;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.6s ease both;
+  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ================================================================
+   BASE
+   ================================================================ */
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(52, 211, 153, 0.3);
+  color: #fff;
+}
+
+/* ================================================================
+   SCROLL REVEAL
+   ================================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* ================================================================
+   MAC DESKTOP MOCKUP
+   ================================================================ */
+
+.mac-screen {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 25px 60px -12px rgba(0, 0, 0, 0.6),
+    0 0 120px -20px rgba(52, 211, 153, 0.06);
+}
+
+.mac-wallpaper {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 80%, rgba(30, 58, 138, 0.6) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(37, 99, 235, 0.4) 0%, transparent 45%),
+    radial-gradient(ellipse at 20% 20%, rgba(88, 28, 135, 0.5) 0%, transparent 40%),
+    linear-gradient(150deg, #0f0527 0%, #121a4a 30%, #132e6b 55%, #1d4ed8 80%, #1e40af 100%);
+}
+
+.mac-menubar {
+  position: relative;
+  height: 26px;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  z-index: 1;
+}
+
+.mac-menubar-left,
+.mac-menubar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mac-menubar-right {
+  gap: 8px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mac-dock {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 2;
+}
+
+.dock-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  opacity: 0.8;
+}
+
+/* ================================================================
+   NOTCH
+   ================================================================ */
+
+.notch-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+}
+
+.notch {
+  background: #000;
+  overflow: hidden;
+  width: 100px;
+  height: 20px;
+  border-radius: 0 0 10px 10px;
+  transition:
+    width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.35s ease;
+  position: relative;
+}
+
+.notch.open {
+  width: 400px;
+  height: 180px;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.7);
+  transition:
+    width 0.5s cubic-bezier(0.34, 1.28, 0.64, 1),
+    height 0.5s cubic-bezier(0.34, 1.28, 0.64, 1),
+    border-radius 0.5s ease;
+}
+
+/* Tab bar */
+.notch-tabs {
+  display: flex;
+  gap: 10px;
+  padding: 24px 12px 6px;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.notch.open .notch-tabs {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+}
+
+.notch-tab {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.notch-tab.active { color: #fff; }
+
+.notch-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notch.open .notch-divider {
+  opacity: 1;
+  transition: opacity 0.3s ease 0.12s;
+}
+
+/* Session cards */
+.notch-cards {
+  display: flex;
+  gap: 7px;
+  padding: 7px 10px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.65);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.notch.open .notch-cards {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.4s ease 0.18s, transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) 0.18s;
+}
+
+/* ================================================================
+   MINI SESSION CARDS
+   ================================================================ */
+
+.mini-card {
+  flex-shrink: 0;
+  width: 120px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.mini-card.hovered {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.mini-card.clicked {
+  transform: scale(0.97);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.mini-card-terminal {
+  height: 68px;
+  padding: 3px 4px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+/* Scrolling terminal reels */
+.terminal-reel {
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-reel.scrolling {
+  animation: reel-scroll var(--reel-duration, 14s) ease-in-out infinite alternate;
+}
+
+@keyframes reel-scroll {
+  0%, 8% { transform: translateY(0); }
+  92%, 100% { transform: translateY(var(--reel-offset, -80px)); }
+}
+
+.tl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 4.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tl-w { color: rgba(255, 255, 255, 0.5); }
+.tl-g { color: rgba(74, 222, 128, 0.85); }
+.tl-r { color: rgba(248, 113, 113, 0.85); }
+.tl-d { color: rgba(255, 255, 255, 0.2); }
+
+.mini-card-meta { padding: 4px 5px; }
+
+.mini-badge {
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.mini-diff {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 5px;
+  margin-left: 3px;
+}
+
+.mini-card-name {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 6.5px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================================================
+   DEMO CURSOR
+   ================================================================ */
+
+.demo-cursor {
+  position: absolute;
+  z-index: 50;
+  width: 18px;
+  height: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: left 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.demo-cursor.visible {
+  opacity: 1;
+}
+
+.demo-cursor.fast {
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+/* Click ripple */
+.click-ripple {
+  position: absolute;
+  z-index: 49;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.3);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+.click-ripple.active {
+  animation: ripple-out 0.5s ease-out forwards;
+}
+
+@keyframes ripple-out {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* ================================================================
+   MOCK TERMINAL
+   ================================================================ */
+
+.mock-terminal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -42%) scale(0.96);
+  width: 50%;
+  height: 55%;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.34, 1.15, 0.64, 1);
+  overflow: hidden;
+}
+
+.mock-terminal.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.terminal-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.terminal-title {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.terminal-body {
+  flex: 1;
+  padding: 8px 12px;
+  overflow: hidden;
+}
+
+.term-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  line-height: 1.7;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.08s ease, transform 0.08s ease;
+}
+
+.term-line.typed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.term-line.c-white { color: rgba(255, 255, 255, 0.8); }
+.term-line.c-accent { color: #34d399; }
+.term-line.c-dim { color: rgba(255, 255, 255, 0.35); }
+.term-line.c-green { color: #4ade80; }
+.term-line.c-red { color: #f87171; }
+.term-line.c-yellow { color: #fbbf24; }
+.term-line.c-blue { color: #60a5fa; }
+.term-line.c-ctx { color: rgba(255, 255, 255, 0.35); }
+.term-line.c-del {
+  color: rgba(248, 113, 113, 0.9);
+  background: rgba(220, 38, 38, 0.12);
+  margin-left: -12px;
+  margin-right: -12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.term-line.c-add {
+  color: rgba(74, 222, 128, 0.9);
+}
+
+/* ================================================================
+   FEATURE CARDS
+   ================================================================ */
+
+.feature-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: border-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: rgba(52, 211, 153, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px -8px rgba(52, 211, 153, 0.08);
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.12);
+  color: var(--color-accent);
+}
+
+/* ================================================================
+   CODE BLOCK
+   ================================================================ */
+
+.code-block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text-muted);
+  overflow-x: auto;
+}
+
+.code-block .prompt {
+  color: var(--color-accent);
+  user-select: none;
+}
+
+.code-block .cmd {
+  color: var(--color-text);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+@media (max-width: 768px) {
+  .mac-screen { border-radius: 8px; }
+
+  .notch.open {
+    width: 280px;
+    height: 140px;
+  }
+
+  .mini-card { width: 82px; }
+  .mini-card-terminal { height: 48px; }
+
+  .mock-terminal {
+    width: 85%;
+  }
+
+  .demo-cursor { display: none; }
+}

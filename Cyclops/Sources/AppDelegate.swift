@@ -47,8 +47,8 @@ class AppState: ObservableObject {
             let memories = bridge.fetchMemories()
 
             for i in sessions.indices {
-                guard sessions[i].isActive else { continue }
-                let tmuxTarget = sessions[i].tmuxSession.isEmpty ? sessions[i].projectName : sessions[i].tmuxSession
+                guard sessions[i].status != .offline else { continue }
+                let tmuxTarget = sessions[i].tmuxTarget.isEmpty ? sessions[i].projectName : sessions[i].tmuxTarget
                 sessions[i].terminalContent = bridge.captureTerminalContent(for: tmuxTarget)
                 let stats = bridge.fetchDiffStats(workspacePath: sessions[i].workspacePath)
                 sessions[i].linesAdded = stats.added
