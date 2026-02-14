@@ -206,7 +206,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="mac-dock">
           <div class="dock-icon" style="background:linear-gradient(135deg,#2196F3,#1565C0)"></div>
           <div class="dock-icon" style="background:linear-gradient(135deg,#42A5F5,#1E88E5)"></div>
-          <div class="dock-icon" style="background:linear-gradient(135deg,#1a1a1a,#333)"></div>
+          <div class="dock-icon" style="background:url(/icon-64.png) center/cover"></div>
           <div class="dock-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
           <div class="dock-icon" style="background:linear-gradient(135deg,#66BB6A,#43A047)"></div>
           <div class="dock-icon" style="background:linear-gradient(135deg,#FF7043,#E64A19)"></div>
@@ -440,7 +440,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="mac-dock">
             <div class="dock-icon" style="background:linear-gradient(135deg,#2196F3,#1565C0)"></div>
             <div class="dock-icon" style="background:linear-gradient(135deg,#42A5F5,#1E88E5)"></div>
-            <div class="dock-icon" style="background:linear-gradient(135deg,#1a1a1a,#333)"></div>
+            <div class="dock-icon" style="background:url(/icon-64.png) center/cover"></div>
             <div class="dock-icon" style="background:linear-gradient(135deg,#7C4DFF,#536DFE)"></div>
             <div class="dock-icon" style="background:linear-gradient(135deg,#66BB6A,#43A047)"></div>
             <div class="dock-icon" style="background:linear-gradient(135deg,#FF7043,#E64A19)"></div>
@@ -493,6 +493,9 @@ import Layout from '../layouts/Layout.astro';
        ============================================================ -->
   <section class="py-24 px-6" id="download">
     <div class="max-w-3xl mx-auto text-center">
+      <div class="reveal mb-6">
+        <img src="/icon-256.png" alt="Cyclops — one-eyed octopus mascot" width="80" height="80" class="mx-auto rounded-2xl shadow-lg shadow-accent/10" />
+      </div>
       <h2 class="reveal font-display text-3xl sm:text-4xl font-bold mb-4">get cyclops</h2>
       <p class="reveal text-text-muted mb-12">Free and open source. Requires macOS 13+ and a Mac with a notch.</p>
 
@@ -539,16 +542,16 @@ import Layout from '../layouts/Layout.astro';
   <footer class="py-16 px-6 border-t border-border">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="3" fill="#34d399"/>
-          <line x1="12" y1="2" x2="12" y2="7" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="12" y1="17" x2="12" y2="22" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="2" y1="12" x2="7" y2="12" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="17" y1="12" x2="22" y2="12" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="4.93" y1="4.93" x2="8.46" y2="8.46" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="15.54" y1="15.54" x2="19.07" y2="19.07" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="4.93" y1="19.07" x2="8.46" y2="15.54" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="15.54" y1="8.46" x2="19.07" y2="4.93" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="11" r="9" fill="#34d399"/>
+          <path d="M7 17C5 21 4 25 6 28" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M11 19C10 23 9 27 11 29" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M16 20C16 24 15 28 16 30" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M21 19C22 23 23 27 21 29" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M25 17C27 21 28 25 26 28" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="16" cy="11" r="4.5" fill="white"/>
+          <circle cx="16" cy="11" r="2.2" fill="#050505"/>
+          <circle cx="17.2" cy="9.8" r=".8" fill="white"/>
         </svg>
         <span class="font-display font-bold text-sm tracking-wide">cyclops</span>
       </div>
