@@ -2,3 +2,5 @@
 .build/
 Cyclops/.build/
 .conductor/
+*.app
+*.dmg
