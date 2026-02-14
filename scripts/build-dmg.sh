@@ -20,10 +20,6 @@ rm -f "$DMG_NAME"
 
 echo "Creating $DMG_NAME..."
 
-# Resize background to 600x400 if needed
-RESIZED_BG="/tmp/dmg-bg-resized.png"
-sips --resampleHeightWidth 400 600 "$DMG_BACKGROUND" --out "$RESIZED_BG" > /dev/null 2>&1
-
 # Stage the .app in a temp folder (create-dmg expects a source folder)
 STAGE_DIR=$(mktemp -d)
 cp -R "$APP" "$STAGE_DIR/"
@@ -37,7 +33,7 @@ create-dmg \
     --icon-size 128 \
     --icon "$APP" 150 200 \
     --app-drop-link 450 200 \
-    --background "$RESIZED_BG" \
+    --background "$DMG_BACKGROUND" \
     --no-internet-enable \
     "$DMG_NAME" \
     "$STAGE_DIR"
@@ -45,7 +41,6 @@ DMG_EXIT=$?
 set -e
 
 rm -rf "$STAGE_DIR"
-rm -f "$RESIZED_BG"
 
 if [ ! -f "$DMG_NAME" ]; then
     echo "Error: Failed to create $DMG_NAME (exit code $DMG_EXIT)"
